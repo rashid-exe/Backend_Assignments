@@ -1,0 +1,743 @@
+db.student.insertOne({
+  name: "Rashid",
+  city: "City",
+  dept: "Computer Science",
+  age: 22
+});
+
+db.student.insertMany([
+  { name: "Nilay", city: "Ahmedabad", dept: "Computer Science", age: 22 },
+  { name: "Asha", city: "Surat", dept: "Electrical", age: 21 },
+  { name: "Raj", city: "Vadodara", dept: "Mechanical", age: 23 }
+
+
+db.student.find({"city":"Surat"}).pretty()
+ 
+
+db.monuments.insertOne(
+  {
+    "name": "The Pyramids of Giza",
+    "city": "Giza",
+    "country": "Egypt",
+    "gps": {
+      "lat": 39.976480,
+      "lng": 41.131302
+    }
+  }
+)
+
+
+db.monuments.insertMany([
+
+  {"name": "The Valley of the Kings", "city": "Luxor", "country": "Egypt", "gps": { "lat": 25.746424, "lng": 32.605309 }},
+
+  {"name": "Arc de Triomphe", "city": "Paris", "country": "France", "gps": { "lat": 48.873756, "lng": 2.294946 }},
+
+  {"name": "The Eiffel Tower", "city": "Paris", "country": "France", "gps": { "lat": 48.858093, "lng": 2.294694 }},
+
+  {"name": "Acropolis", "city": "Athens", "country": "Greece", "gps": { "lat": 37.970833, "lng": 23.726110 }},
+
+  {"name": "The Great Wall of China", "city": "Huairou", "country": "China", "gps": { "lat": 40.431908, "lng": 116.570374 }},
+
+  {"name": "The Statue of Liberty", "city": "New York", "country": "USA", "gps": { "lat": 40.689247, "lng": -74.044502 }}
+
+])
+ 
+
+db.createCollection("food_item", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["name", "price", "brand", "calories", "category"],
+      properties: {
+        name: {
+          bsonType: "string",
+          description: "must be a string and is required"
+        },
+        price: {
+          bsonType: "double",
+          description: "must be a double (decimal number) and is required"
+        },
+        brand: {
+          bsonType: "string",
+          description: "must be a string and is required"
+        },
+        calories: {
+          bsonType: "int",
+          description: "must be an integer and is required"
+        },
+        category: {
+          bsonType: "string",
+          description: "must be a string and is required"
+        }
+      }
+    }
+  }
+});
+
+> db.food_item.insertMany([
+...   {
+...     name: "Cheddar Cheese",
+...     price: 5.99,
+...     brand: "DairyBest",
+...     calories: 110,
+...     category: "Dairy"
+...   },
+...   {
+...     name: "Organic Banana",
+...     price: 0.79,
+...     brand: "FreshFarms",
+...     calories: 105,
+...     category: "Fruit"
+...   },
+...   {
+...     name: "Whole Wheat Bread",
+...     price: 2.49,
+...     brand: "BakeHouse",
+...     calories: 130,
+...     category: "Bakery"
+...   },
+...   {
+...     name: "Almond Butter",
+...     price: 8.99,
+...     brand: "NuttySpread",
+...     calories: 190,
+...     category: "Spreads"
+...   },
+...   {
+...     name: "Greek Yogurt",
+...     price: 1.25,
+...     brand: "HealthyChoice",
+...     calories: 100,
+...     category: "Dairy"
+...   }
+... ]);
+2025-09-29T12:03:23.374+0530 E  QUERY    [js] uncaught exception: BulkWriteError({
+        "writeErrors" : [
+                {
+                        "index" : 0,
+                        "code" : 121,
+                        "errmsg" : "Document failed validation",
+                        "op" : {
+                                "_id" : ObjectId("68da2833db66908861ef0cff"),
+                                "name" : "Cheddar Cheese",
+                                "price" : 5.99,
+                                "brand" : "DairyBest",
+                                "calories" : 110,
+                                "category" : "Dairy"
+                        }
+                }
+        ],
+        "writeConcernErrors" : [ ],
+        "nInserted" : 0,
+        "nUpserted" : 0,
+        "nMatched" : 0,
+        "nModified" : 0,
+        "nRemoved" : 0,
+        "upserted" : [ ]
+}) :
+BulkWriteError({
+        "writeErrors" : [
+                {
+                        "index" : 0,
+                        "code" : 121,
+                        "errmsg" : "Document failed validation",
+                        "op" : {
+                                "_id" : ObjectId("68da2833db66908861ef0cff"),
+                                "name" : "Cheddar Cheese",
+                                "price" : 5.99,
+                                "brand" : "DairyBest",
+                                "calories" : 110,
+                                "category" : "Dairy"
+                        }
+                }
+        ],
+        "writeConcernErrors" : [ ],
+        "nInserted" : 0,
+        "nUpserted" : 0,
+        "nMatched" : 0,
+        "nModified" : 0,
+        "nRemoved" : 0,
+        "upserted" : [ ]
+})
+BulkWriteError@src/mongo/shell/bulk_api.js:367:48
+BulkWriteResult/this.toError@src/mongo/shell/bulk_api.js:332:24
+Bulk/this.execute@src/mongo/shell/bulk_api.js:1186:23
+DBCollection.prototype.insertMany@src/mongo/shell/crud_api.js:326:5
+@(shell):1:1
+> db.food_item.insertMany([
+...   {
+...     name: "Cheddar Cheese",
+...     price: NumberDecimal("5.99"),
+...     brand: "DairyBest",
+...     calories: NumberInt(110),
+...     category: "Dairy"
+...   },
+...   {
+...     name: "Organic Banana",
+...     price: NumberDecimal("0.79"),
+...     brand: "FreshFarms",
+...     calories: NumberInt(105),
+...     category: "Fruit"
+...   },
+...   {
+...     name: "Whole Wheat Bread",
+...     price: NumberDecimal("2.49"),
+...     brand: "BakeHouse",
+...     calories: NumberInt(130),
+...     category: "Bakery"
+...   },
+...   {
+...     name: "Almond Butter",
+...     price: NumberDecimal("8.99"),
+...     brand: "NuttySpread",
+...     calories: NumberInt(190),
+...     category: "Spreads"
+...   },
+...   {
+...     name: "Greek Yogurt",
+...     price: NumberDecimal("1.25"),
+...     brand: "HealthyChoice",
+...     calories: NumberInt(100),
+...     category: "Dairy"
+...   }
+... ]);
+2025-09-29T12:04:01.901+0530 E  QUERY    [js] uncaught exception: BulkWriteError({
+        "writeErrors" : [
+                {
+                        "index" : 0,
+                        "code" : 121,
+                        "errmsg" : "Document failed validation",
+                        "op" : {
+                                "_id" : ObjectId("68da2859db66908861ef0d04"),
+                                "name" : "Cheddar Cheese",
+                                "price" : NumberDecimal("5.99"),
+                                "brand" : "DairyBest",
+                                "calories" : NumberInt(110),
+                                "category" : "Dairy"
+                        }
+                }
+        ],
+        "writeConcernErrors" : [ ],
+        "nInserted" : 0,
+        "nUpserted" : 0,
+        "nMatched" : 0,
+        "nModified" : 0,
+        "nRemoved" : 0,
+        "upserted" : [ ]
+}) :
+BulkWriteError({
+        "writeErrors" : [
+                {
+                        "index" : 0,
+                        "code" : 121,
+                        "errmsg" : "Document failed validation",
+                        "op" : {
+                                "_id" : ObjectId("68da2859db66908861ef0d04"),
+                                "name" : "Cheddar Cheese",
+                                "price" : NumberDecimal("5.99"),
+                                "brand" : "DairyBest",
+                                "calories" : NumberInt(110),
+                                "category" : "Dairy"
+                        }
+                }
+        ],
+        "writeConcernErrors" : [ ],
+        "nInserted" : 0,
+        "nUpserted" : 0,
+        "nMatched" : 0,
+        "nModified" : 0,
+        "nRemoved" : 0,
+        "upserted" : [ ]
+})
+BulkWriteError@src/mongo/shell/bulk_api.js:367:48
+BulkWriteResult/this.toError@src/mongo/shell/bulk_api.js:332:24
+Bulk/this.execute@src/mongo/shell/bulk_api.js:1186:23
+DBCollection.prototype.insertMany@src/mongo/shell/crud_api.js:326:5
+@(shell):1:1
+>
+> db.getCollectionInfos({name: "food_item"})[0].options.validator
+{
+        "$jsonSchema" : {
+                "bsonType" : "object",
+                "required" : [
+                        "name",
+                        "price",
+                        "brand",
+                        "calories",
+                        "category"
+                ],
+                "properties" : {
+                        "name" : {
+                                "bsonType" : "string",
+                                "description" : "must be a string and is required"
+                        },
+                        "price" : {
+                                "bsonType" : "double",
+                                "description" : "must be a double (decimal number) and is required"
+                        },
+                        "brand" : {
+                                "bsonType" : "string",
+                                "description" : "must be a string and is required"
+                        },
+                        "calories" : {
+                                "bsonType" : "int",
+                                "description" : "must be an integer and is required"
+                        },
+                        "category" : {
+                                "bsonType" : "string",
+                                "description" : "must be a string and is required"
+                        }
+                }
+        }
+}
+> db.food_item.insertMany([
+...   {
+...     name: "Cheddar Cheese",
+...     price: 5.99,             // JS number (double)
+...     brand: "DairyBest",
+...     calories: NumberInt(110),
+...     category: "Dairy"
+...   },
+...   {
+...     name: "Organic Banana",
+...     price: 0.79,
+...     brand: "FreshFarms",
+...     calories: NumberInt(105),
+...     category: "Fruit"
+...   },
+...   {
+...     name: "Whole Wheat Bread",
+...     price: 2.49,
+...     brand: "BakeHouse",
+...     calories: NumberInt(130),
+...     category: "Bakery"
+...   },
+...   {
+...     name: "Almond Butter",
+...     price: 8.99,
+...     brand: "NuttySpread",
+...     calories: NumberInt(190),
+...     category: "Spreads"
+...   },
+...   {
+...     name: "Greek Yogurt",
+...     price: 1.25,
+...     brand: "HealthyChoice",
+...     calories: NumberInt(100),
+...     category: "Dairy"
+...   }
+... ]);
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("68da28a4db66908861ef0d09"),
+                ObjectId("68da28a4db66908861ef0d0a"),
+                ObjectId("68da28a4db66908861ef0d0b"),
+                ObjectId("68da28a4db66908861ef0d0c"),
+                ObjectId("68da28a4db66908861ef0d0d")
+        ]
+}
+>
+> db.createCollection("restaurants", {
+...   validator: {
+...     $jsonSchema: {
+...       bsonType: "object",
+...       required: ["name", "year", "number", "email", "location", "no_of_days_open", "city", "category", "serving"],
+...       properties: {
+...         name: {
+...           bsonType: "string",
+...           description: "must be a string and is required"
+...         },
+...         year: {
+...           bsonType: "int",
+...           minimum: 1800,  // just a reasonable lower bound for year founded
+...           maximum: 2100,
+...           description: "must be an integer (year) and is required"
+...         },
+...         number: {
+...           bsonType: "string",
+...           pattern: "^\\+?[0-9\\-\\s]{7,15}$",  // phone number regex (basic)
+...           description: "must be a string and match phone number format"
+...         },
+...         email: {
+...           bsonType: "string",
+...           pattern: "^.+@.+\\..+$",
+...           description: "must be a string and match email format"
+...         },
+...         location: {
+...           bsonType: "string",
+...           description: "must be a string and is required"
+...         },
+...         no_of_days_open: {
+...           bsonType: "int",
+...           minimum: 0,
+...           maximum: 7,
+...           description: "must be an integer (0-7) and is required"
+...         },
+...         city: {
+...           bsonType: "string",
+...           description: "must be a string and is required"
+...         },
+...         category: {
+...           bsonType: "string",
+...           description: "must be a string and is required"
+...         },
+...         serving: {
+...           bsonType: "string",
+...           description: "must be a string and is required"
+...         }
+...       }
+...     }
+...   }
+... });
+{ "ok" : 1 }
+>
+> db.restaurants.insertMany([
+...   {
+...     name: "Sunset Grill",
+...     year: NumberInt(1998),
+...     number: "+1-555-123-4567",
+...     email: "contact@sunsetgrill.com",
+...     location: "123 Ocean Drive",
+...     no_of_days_open: NumberInt(6),
+...     city: "Miami",
+...     category: "Casual Dining",
+...     serving: "Dine-in"
+...   },
+...   {
+...     name: "Green Garden Cafe",
+...     year: NumberInt(2010),
+...     number: "+44 20 7946 0958",
+...     email: "info@greengardencafe.co.uk",
+...     location: "45 Elm Street",
+...     no_of_days_open: NumberInt(7),
+...     city: "London",
+...     category: "Cafe",
+...     serving: "Dine-in / Takeaway"
+...   },
+...   {
+...     name: "Spice Route",
+...     year: NumberInt(2005),
+...     number: "9876543210",
+...     email: "hello@spiceroute.in",
+...     location: "789 Spice Avenue",
+...     no_of_days_open: NumberInt(5),
+...     city: "Mumbai",
+...     category: "Fine Dining",
+...     serving: "Dine-in"
+...   },
+...   {
+...     name: "Quick Bites",
+...     year: NumberInt(2018),
+...     number: "+61 3 1234 5678",
+...     email: "support@quickbites.au",
+...     location: "12 King Street",
+...     no_of_days_open: NumberInt(7),
+...     city: "Sydney",
+...     category: "Fast Food",
+...     serving: "Takeaway"
+...   },
+...   {
+...     name: "La Pasta",
+...     year: NumberInt(2000),
+...     number: "+39 06 1234567",
+...     email: "contact@lapasta.it",
+...     location: "Via Roma 20",
+...     no_of_days_open: NumberInt(6),
+...     city: "Rome",
+...     category: "Italian",
+...     serving: "Dine-in / Takeaway"
+...   }
+... ]);
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("68da2947db66908861ef0d0e"),
+                ObjectId("68da2947db66908861ef0d0f"),
+                ObjectId("68da2947db66908861ef0d10"),
+                ObjectId("68da2947db66908861ef0d11"),
+                ObjectId("68da2947db66908861ef0d12")
+        ]
+}
+> db.restaurants.findOne();
+{
+        "_id" : ObjectId("68da2947db66908861ef0d0e"),
+        "name" : "Sunset Grill",
+        "year" : 1998,
+        "number" : "+1-555-123-4567",
+        "email" : "contact@sunsetgrill.com",
+        "location" : "123 Ocean Drive",
+        "no_of_days_open" : 6,
+        "city" : "Miami",
+        "category" : "Casual Dining",
+        "serving" : "Dine-in"
+}
+>  db.restaurants.findOne({category:"cafe"});
+null
+> db.restaurants.findOne({category:"Cafe"});
+{
+        "_id" : ObjectId("68da2947db66908861ef0d0f"),
+        "name" : "Green Garden Cafe",
+        "year" : 2010,
+        "number" : "+44 20 7946 0958",
+        "email" : "info@greengardencafe.co.uk",
+        "location" : "45 Elm Street",
+        "no_of_days_open" : 7,
+        "city" : "London",
+        "category" : "Cafe",
+        "serving" : "Dine-in / Takeaway"
+}
+> db.food_item.find({ category: "Dairy" }).pretty();
+{
+        "_id" : ObjectId("68da28a4db66908861ef0d09"),
+        "name" : "Cheddar Cheese",
+        "price" : 5.99,
+        "brand" : "DairyBest",
+        "calories" : 110,
+        "category" : "Dairy"
+}
+{
+        "_id" : ObjectId("68da28a4db66908861ef0d0d"),
+        "name" : "Greek Yogurt",
+        "price" : 1.25,
+        "brand" : "HealthyChoice",
+        "calories" : 100,
+        "category" : "Dairy"
+}
+> db.food_item.find({ calories: { $lt: 120 } }).pretty();
+{
+        "_id" : ObjectId("68da28a4db66908861ef0d09"),
+        "name" : "Cheddar Cheese",
+        "price" : 5.99,
+        "brand" : "DairyBest",
+        "calories" : 110,
+        "category" : "Dairy"
+}
+{
+        "_id" : ObjectId("68da28a4db66908861ef0d0a"),
+        "name" : "Organic Banana",
+        "price" : 0.79,
+        "brand" : "FreshFarms",
+        "calories" : 105,
+        "category" : "Fruit"
+}
+{
+        "_id" : ObjectId("68da28a4db66908861ef0d0d"),
+        "name" : "Greek Yogurt",
+        "price" : 1.25,
+        "brand" : "HealthyChoice",
+        "calories" : 100,
+        "category" : "Dairy"
+}
+> db.food_item.find({ price: { $gte: 2, $lte: 6 } }).pretty();
+{
+        "_id" : ObjectId("68da28a4db66908861ef0d09"),
+        "name" : "Cheddar Cheese",
+        "price" : 5.99,
+        "brand" : "DairyBest",
+        "calories" : 110,
+        "category" : "Dairy"
+}
+{
+        "_id" : ObjectId("68da28a4db66908861ef0d0b"),
+        "name" : "Whole Wheat Bread",
+        "price" : 2.49,
+        "brand" : "BakeHouse",
+        "calories" : 130,
+        "category" : "Bakery"
+}
+> db.food_item.updateOne(
+...   { name: "Cheddar Cheese" },
+...   { $set: { price: 6.49 } }
+... );
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+> db.food_item.updateMany(
+...   { category: "Bakery" },
+...   { $inc: { calories: 10 } }
+... );
+2025-09-29T12:12:05.754+0530 E  QUERY    [js] WriteError({
+        "index" : 0,
+        "code" : 121,
+        "errmsg" : "Document failed validation",
+        "op" : {
+                "q" : {
+                        "category" : "Bakery"
+                },
+                "u" : {
+                        "$inc" : {
+                                "calories" : 10
+                        }
+                },
+                "multi" : true,
+                "upsert" : false
+        }
+}) :
+WriteError({
+        "index" : 0,
+        "code" : 121,
+        "errmsg" : "Document failed validation",
+        "op" : {
+                "q" : {
+                        "category" : "Bakery"
+                },
+                "u" : {
+                        "$inc" : {
+                                "calories" : 10
+                        }
+                },
+                "multi" : true,
+                "upsert" : false
+        }
+})
+WriteError@src/mongo/shell/bulk_api.js:458:48
+mergeBatchResults@src/mongo/shell/bulk_api.js:855:49
+executeBatch@src/mongo/shell/bulk_api.js:919:13
+Bulk/this.execute@src/mongo/shell/bulk_api.js:1163:21
+DBCollection.prototype.updateMany@src/mongo/shell/crud_api.js:690:17
+@(shell):1:1
+> db.food_item.updateMany(
+...   { category: "Bakery" },
+...   { $inc: { calories: 10 } }
+... );
+2025-09-29T12:12:15.482+0530 E  QUERY    [js] WriteError({
+        "index" : 0,
+        "code" : 121,
+        "errmsg" : "Document failed validation",
+        "op" : {
+                "q" : {
+                        "category" : "Bakery"
+                },
+                "u" : {
+                        "$inc" : {
+                                "calories" : 10
+                        }
+                },
+                "multi" : true,
+                "upsert" : false
+        }
+}) :
+WriteError({
+        "index" : 0,
+        "code" : 121,
+        "errmsg" : "Document failed validation",
+        "op" : {
+                "q" : {
+                        "category" : "Bakery"
+                },
+                "u" : {
+                        "$inc" : {
+                                "calories" : 10
+                        }
+                },
+                "multi" : true,
+                "upsert" : false
+        }
+})
+WriteError@src/mongo/shell/bulk_api.js:458:48
+mergeBatchResults@src/mongo/shell/bulk_api.js:855:49
+executeBatch@src/mongo/shell/bulk_api.js:919:13
+Bulk/this.execute@src/mongo/shell/bulk_api.js:1163:21
+DBCollection.prototype.updateMany@src/mongo/shell/crud_api.js:690:17
+@(shell):1:1
+> db.restaurants.find({ no_of_days_open: 7 }).pretty();
+{
+        "_id" : ObjectId("68da2947db66908861ef0d0f"),
+        "name" : "Green Garden Cafe",
+        "year" : 2010,
+        "number" : "+44 20 7946 0958",
+        "email" : "info@greengardencafe.co.uk",
+        "location" : "45 Elm Street",
+        "no_of_days_open" : 7,
+        "city" : "London",
+        "category" : "Cafe",
+        "serving" : "Dine-in / Takeaway"
+}
+{
+        "_id" : ObjectId("68da2947db66908861ef0d11"),
+        "name" : "Quick Bites",
+        "year" : 2018,
+        "number" : "+61 3 1234 5678",
+        "email" : "support@quickbites.au",
+        "location" : "12 King Street",
+        "no_of_days_open" : 7,
+        "city" : "Sydney",
+        "category" : "Fast Food",
+        "serving" : "Takeaway"
+}
+> db.restaurants.find({ city: "London" }).pretty();
+{
+        "_id" : ObjectId("68da2947db66908861ef0d0f"),
+        "name" : "Green Garden Cafe",
+        "year" : 2010,
+        "number" : "+44 20 7946 0958",
+        "email" : "info@greengardencafe.co.uk",
+        "location" : "45 Elm Street",
+        "no_of_days_open" : 7,
+        "city" : "London",
+        "category" : "Cafe",
+        "serving" : "Dine-in / Takeaway"
+}
+> db.restaurants.find({ serving: "Takeaway" }).pretty();
+{
+        "_id" : ObjectId("68da2947db66908861ef0d11"),
+        "name" : "Quick Bites",
+        "year" : 2018,
+        "number" : "+61 3 1234 5678",
+        "email" : "support@quickbites.au",
+        "location" : "12 King Street",
+        "no_of_days_open" : 7,
+        "city" : "Sydney",
+        "category" : "Fast Food",
+        "serving" : "Takeaway"
+}
+> db.restaurants.updateOne(
+...   { name: "Quick Bites" },
+...   { $set: { email: "contact@quickbites.au" } }
+... );
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+> db.restaurants.updateMany(
+...   { category: "Casual Dining" },
+...   { $inc: { no_of_days_open: 1 } }
+... );
+2025-09-29T12:13:08.332+0530 E  QUERY    [js] WriteError({
+        "index" : 0,
+        "code" : 121,
+        "errmsg" : "Document failed validation",
+        "op" : {
+                "q" : {
+                        "category" : "Casual Dining"
+                },
+                "u" : {
+                        "$inc" : {
+                                "no_of_days_open" : 1
+                        }
+                },
+                "multi" : true,
+                "upsert" : false
+        }
+}) :
+WriteError({
+        "index" : 0,
+        "code" : 121,
+        "errmsg" : "Document failed validation",
+        "op" : {
+                "q" : {
+                        "category" : "Casual Dining"
+                },
+                "u" : {
+                        "$inc" : {
+                                "no_of_days_open" : 1
+                        }
+                },
+                "multi" : true,
+                "upsert" : false
+        }
+})
+WriteError@src/mongo/shell/bulk_api.js:458:48
+mergeBatchResults@src/mongo/shell/bulk_api.js:855:49
+executeBatch@src/mongo/shell/bulk_api.js:919:13
+Bulk/this.execute@src/mongo/shell/bulk_api.js:1163:21
+DBCollection.prototype.updateMany@src/mongo/shell/crud_api.js:690:17
+@(shell):1:1
+>
